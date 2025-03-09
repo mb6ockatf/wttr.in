@@ -32,7 +32,6 @@ Exports:
     is_location_blocked
 """
 
-
 from __future__ import print_function
 
 import datetime
@@ -92,6 +91,7 @@ def _location_normalize(location):
     """
     Normalize location name `location`
     """
+
     # translation_table = dict.fromkeys(map(ord, '!@#$*;'), None)
     def _remove_chars(chars, string):
         return "".join(x for x in string if x not in chars)
@@ -153,7 +153,13 @@ def _ipcachewrite(ip_addr, location):
     with open(cachefile, "w") as file:
         # like ip2location format
         file.write(
-            location[3] + ";" + location[2] + ";" + location[1] + ";" + location[0]
+            location[3]
+            + ";"
+            + location[2]
+            + ";"
+            + location[1]
+            + ";"
+            + location[0]
         )
         if len(location) > 4:
             file.write(";" + ";".join(map(str, location[4:])))
@@ -224,7 +230,9 @@ def _ipinfo(ip_addr):
     if not IPINFO_TOKEN:
         return None
     try:
-        r = requests.get("https://ipinfo.io/%s/json?token=%s" % (ip_addr, IPINFO_TOKEN))
+        r = requests.get(
+            "https://ipinfo.io/%s/json?token=%s" % (ip_addr, IPINFO_TOKEN)
+        )
         r.raise_for_status()
         r_json = r.json()
         # can't do two unpackings on one line
@@ -270,7 +278,7 @@ def _geoip(ip_addr):
             )
         except IndexError:
             return None
-    except (geoip2.errors.AddressNotFoundError):
+    except geoip2.errors.AddressNotFoundError:
         return None
     return [city, region, country, ccode, lat, long]
 
@@ -499,7 +507,10 @@ def location_processing(location, ip_addr):
         if geolocation is not None:
             if not override_location_name:
                 override_location_name = location[1:].replace("+", " ")
-            location = "%s,%s" % (geolocation["latitude"], geolocation["longitude"])
+            location = "%s,%s" % (
+                geolocation["latitude"],
+                geolocation["longitude"],
+            )
             country = None
             if not hide_full_address:
                 full_address = geolocation["address"]
@@ -534,7 +545,9 @@ def _main_():
                 print(city)
                 shutil.move(
                     filename,
-                    os.path.join("/wttr.in/cache/ip2l-broken-format", ip_address),
+                    os.path.join(
+                        "/wttr.in/cache/ip2l-broken-format", ip_address
+                    ),
                 )
 
 

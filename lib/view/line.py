@@ -215,9 +215,13 @@ def render_wind(data, query):
 
     if degree:
         if query.get("view") in ["v2n", "v2d"]:
-            wind_direction = WIND_DIRECTION_WI[int(((degree + 22.5) % 360) / 45.0)]
+            wind_direction = WIND_DIRECTION_WI[
+                int(((degree + 22.5) % 360) / 45.0)
+            ]
         else:
-            wind_direction = WIND_DIRECTION[int(((degree + 22.5) % 360) / 45.0)]
+            wind_direction = WIND_DIRECTION[
+                int(((degree + 22.5) % 360) / 45.0)
+            ]
     else:
         wind_direction = ""
 
@@ -373,8 +377,8 @@ def render_line(line, data, query):
         )
         current_sun = sun(city.observer, date=datetime_day_start)
 
-        local_time_of = (
-            lambda x: city.timezone
+        local_time_of = lambda x: (
+            city.timezone
             if x == "TZ"
             else current_sun[x]
             .replace(tzinfo=pytz.utc)
@@ -415,9 +419,11 @@ def render_json(data):
 
     output = (
         "\n".join(
-            re.sub('"[^"]*worldweatheronline[^"]*"', '""', line)
-            if "worldweatheronline" in line
-            else line
+            (
+                re.sub('"[^"]*worldweatheronline[^"]*"', '""', line)
+                if "worldweatheronline" in line
+                else line
+            )
             for line in output.splitlines()
         )
         + "\n"
@@ -454,7 +460,9 @@ def format_weather_data(query, parsed_query, data):
 
     current_condition = data["data"]["current_condition"][0]
     current_condition["location"] = parsed_query["location"]
-    current_condition["override_location"] = parsed_query["override_location_name"]
+    current_condition["override_location"] = parsed_query[
+        "override_location_name"
+    ]
     output = render_line(format_line, current_condition, query)
     output = output.rstrip("\n").replace(r"\n", "\n")
     return output

@@ -119,7 +119,12 @@ def draw_spark(data, height, width, color_data):
             return _BARS[-1]
 
         return _BARS[
-            int(1.0 * (value - row_height * row) / (row_height * 1.0) * len(_BARS))
+            int(
+                1.0
+                * (value - row_height * row)
+                / (row_height * 1.0)
+                * len(_BARS)
+            )
         ]
 
     max_value = max(data)
@@ -201,7 +206,9 @@ def draw_date(config, geo_data):
     answer = ""
     for day in range(3):
         datetime_ = datetime_day_start + datetime.timedelta(hours=24 * day)
-        date = format_datetime(datetime_, "EEE dd MMM", locale=locale, tzinfo=tzinfo)
+        date = format_datetime(
+            datetime_, "EEE dd MMM", locale=locale, tzinfo=tzinfo
+        )
 
         spaces = ((24 - len(date)) // 2) * " "
         date = spaces + date + spaces
@@ -315,10 +322,12 @@ def draw_astronomical(city_name, geo_data, config):
         # moon
         if time_interval in [0, 23, 47, 69]:  # time_interval % 3 == 0:
             moon_phase = moon.phase(
-                date=datetime_day_start + datetime.timedelta(hours=time_interval)
+                date=datetime_day_start
+                + datetime.timedelta(hours=time_interval)
             )
             moon_phase_emoji = moon_phases[
-                int(math.floor(moon_phase * 1.0 / 28.0 * 8 + 0.5)) % len(moon_phases)
+                int(math.floor(moon_phase * 1.0 / 28.0 * 8 + 0.5))
+                % len(moon_phases)
             ]
             #    if time_interval in [0, 24, 48, 69]:
             moon_line += moon_phase_emoji  # + " "
@@ -348,7 +357,9 @@ def draw_emoji(data, config):
         weather_symbol_width_vte = constants.WEATHER_SYMBOL_WIDTH_VTE
 
     for i in data:
-        emoji = weather_symbol.get(constants.WWO_CODE.get(str(int(i)), "Unknown"))
+        emoji = weather_symbol.get(
+            constants.WWO_CODE.get(str(int(i)), "Unknown")
+        )
         space = " " * (3 - weather_symbol_width_vte.get(emoji, 1))
         answer += space[:1] + emoji + space[1:]
     answer += "\n"
@@ -390,7 +401,9 @@ def draw_wind(data, color_data, config):
 
         degree = int(degree)
         if degree:
-            wind_direction = wind_direction_list[int(((degree + 22.5) % 360) / 45.0)]
+            wind_direction = wind_direction_list[
+                int(((degree + 22.5) % 360) / 45.0)
+            ]
         else:
             wind_direction = ""
 
@@ -422,7 +435,8 @@ def add_frame(output, width, config):
 
     empty_line = " " * width
     output = (
-        "\n".join("│" + (x or empty_line) + "│" for x in output.splitlines()) + "\n"
+        "\n".join("│" + (x or empty_line) + "│" for x in output.splitlines())
+        + "\n"
     )
 
     weather_report = (
@@ -487,7 +501,9 @@ def generate_panel(data_parsed, geo_data, config):
     color_data = jq_query(precip_chance_query, data_parsed)
     data_interpolated = interpolate_data(data, max_width)
     color_data_interpolated = interpolate_data(color_data, max_width)
-    output += draw_spark(data_interpolated, 5, max_width, color_data_interpolated)
+    output += draw_spark(
+        data_interpolated, 5, max_width, color_data_interpolated
+    )
     output += "\n"
 
     data = jq_query(weather_code_query, data_parsed)
@@ -593,10 +609,14 @@ def textual_information(data_parsed, geo_data, config, html_output=False):
     ]
 
     output.append(
-        "%20s" % tmp_output[0] + " | %20s " % tmp_output[1] + " | %20s" % tmp_output[2]
+        "%20s" % tmp_output[0]
+        + " | %20s " % tmp_output[1]
+        + " | %20s" % tmp_output[2]
     )
     output.append(
-        "%20s" % tmp_output[3] + " | %20s " % tmp_output[4] + " | %20s" % tmp_output[5]
+        "%20s" % tmp_output[3]
+        + " | %20s " % tmp_output[4]
+        + " | %20s" % tmp_output[5]
     )
 
     city_only = False
@@ -612,7 +632,9 @@ def textual_information(data_parsed, geo_data, config, html_output=False):
         output.append(
             "Location: %s%s [%5.4f,%5.4f]"
             % (
-                _shorten_full_location(config["full_address"], city_only=city_only),
+                _shorten_full_location(
+                    config["full_address"], city_only=city_only
+                ),
                 suffix,
                 latitude,
                 longitude,

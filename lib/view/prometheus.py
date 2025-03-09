@@ -71,7 +71,9 @@ def render_prometheus(data):
     """
 
     already_seen = []
-    answer = _render_current(data["current_condition"][0], already_seen=already_seen)
+    answer = _render_current(
+        data["current_condition"][0], already_seen=already_seen
+    )
     for i in range(3):
         answer += _render_current(
             data["weather"][i], for_day="%sd" % i, already_seen=already_seen

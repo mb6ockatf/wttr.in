@@ -67,7 +67,8 @@ def extract_emojis_to_directory(dirname):
             "-set",
             "colorspace",
             "sRGB",
-            'pango:<span font="%s" size="20000">%s</span>' % (emoji_font, emoji),
+            'pango:<span font="%s" size="20000">%s</span>'
+            % (emoji_font, emoji),
             filename,
         ]
         subprocess.Popen(convert_string)

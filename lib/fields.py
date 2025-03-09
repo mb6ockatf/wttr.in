@@ -31,12 +31,27 @@ DESCRIPTION = {
     ),
     # fields with `description`
     "weatherDesc": ("Weather Description", "weather_desc"),
-    "winddir16Point": ("Wind Direction on a 16-wind compass rose", "winddir_16_point"),
+    "winddir16Point": (
+        "Wind Direction on a 16-wind compass rose",
+        "winddir_16_point",
+    ),
     # forecast fields
-    "maxtempC": ("Maximum Temperature in Celsius", "temperature_celsius_maximum"),
-    "maxtempF": ("Maximum Temperature in Fahrenheit", "temperature_fahrenheit_maximum"),
-    "mintempC": ("Minimum Temperature in Celsius", "temperature_celsius_minimum"),
-    "mintempF": ("Minimum Temperature in Fahrenheit", "temperature_fahrenheit_minimum"),
+    "maxtempC": (
+        "Maximum Temperature in Celsius",
+        "temperature_celsius_maximum",
+    ),
+    "maxtempF": (
+        "Maximum Temperature in Fahrenheit",
+        "temperature_fahrenheit_maximum",
+    ),
+    "mintempC": (
+        "Minimum Temperature in Celsius",
+        "temperature_celsius_minimum",
+    ),
+    "mintempF": (
+        "Minimum Temperature in Fahrenheit",
+        "temperature_fahrenheit_minimum",
+    ),
     "sunHour": ("Hours of sunlight", "sun_hour"),
     "totalSnow_cm": ("Total snowfall in cm", "snowfall_cm"),
     # astronomy fields

@@ -9,7 +9,6 @@ import datetime
 
 
 class Logger:
-
     """
     Generic logger.
     For specific loggers, _shorten_query() should be rewritten.

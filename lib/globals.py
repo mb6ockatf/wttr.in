@@ -11,6 +11,7 @@ External environment variables:
     WTTR_USER_AGENT
 
 """
+
 from __future__ import print_function
 
 import logging
@@ -100,15 +101,17 @@ PLAIN_TEXT_PAGES = [":help", ":bash.function", ":translation", ":iterm2"]
 
 TRANSLATION_TABLE = str.maketrans(
     {
-        "\u2196": "\u256E",  # '↖' -> '╮'
-        "\u2197": "\u256D",  # '↗' -> '╭'
+        "\u2196": "\u256e",  # '↖' -> '╮'
+        "\u2197": "\u256d",  # '↗' -> '╭'
         "\u2198": "\u2570",  # '↘' -> '╰'
-        "\u2199": "\u256F",  # '↙' -> '╯'
-        "\u26A1": "\u250C\u2518",
+        "\u2199": "\u256f",  # '↙' -> '╯'
+        "\u26a1": "\u250c\u2518",
     }
 )
 
-_IPLOCATION_ORDER = os.environ.get("WTTR_IPLOCATION_ORDER", "geoip,ip2location,ipinfo")
+_IPLOCATION_ORDER = os.environ.get(
+    "WTTR_IPLOCATION_ORDER", "geoip,ip2location,ipinfo"
+)
 IPLOCATION_ORDER = _IPLOCATION_ORDER.split(",")
 
 _IP2LOCATION_KEY_FILE = os.environ.get(
@@ -125,7 +128,9 @@ IPINFO_TOKEN = None
 if os.path.exists(_IPINFO_KEY_FILE):
     IPINFO_TOKEN = open(_IPINFO_KEY_FILE, "r").read().strip()
 
-_WWO_KEY_FILE = os.environ.get("WTTR_WWO_KEY_FILE", os.environ["HOME"] + "/.wwo.key")
+_WWO_KEY_FILE = os.environ.get(
+    "WTTR_WWO_KEY_FILE", os.environ["HOME"] + "/.wwo.key"
+)
 WWO_KEY = "key-is-not-specified"
 USE_METNO = True
 USER_AGENT = os.environ.get("WTTR_USER_AGENT", "")

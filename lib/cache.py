@@ -24,7 +24,9 @@ MIN_SIZE_FOR_FILECACHE = 80
 
 def _update_answer(answer):
     def _now_in_tz(timezone):
-        return datetime.datetime.now(pytz.timezone(timezone)).strftime("%H:%M:%S%z")
+        return datetime.datetime.now(pytz.timezone(timezone)).strftime(
+            "%H:%M:%S%z"
+        )
 
     if isinstance(answer, str) and "%{{NOW(" in answer:
         answer = re.sub(
@@ -52,7 +54,12 @@ def get_signature(user_agent, query_string, client_ip_address, lang):
     if ":" in location:
         return None
 
-    signature = "%s:%s:%s:%s" % (user_agent, query_string, client_ip_address, lang)
+    signature = "%s:%s:%s:%s" % (
+        user_agent,
+        query_string,
+        client_ip_address,
+        lang,
+    )
     print(signature)
     return signature
 

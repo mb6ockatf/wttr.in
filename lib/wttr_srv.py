@@ -63,16 +63,18 @@ def show_text_file(name, lang):
     if name == ":help":
         text = open(get_help_file(lang), "r").read()
         text = text.replace("FULL_TRANSLATION", " ".join(FULL_TRANSLATION))
-        text = text.replace("PARTIAL_TRANSLATION", " ".join(PARTIAL_TRANSLATION))
+        text = text.replace(
+            "PARTIAL_TRANSLATION", " ".join(PARTIAL_TRANSLATION)
+        )
     elif name == ":bash.function":
         text = open(BASH_FUNCTION_FILE, "r").read()
     elif name == ":iterm2":
         text = open("share/iterm2.txt", "r").read()
     elif name == ":translation":
         text = open(TRANSLATION_FILE, "r").read()
-        text = text.replace("NUMBER_OF_LANGUAGES", str(len(SUPPORTED_LANGS))).replace(
-            "SUPPORTED_LANGUAGES", " ".join(SUPPORTED_LANGS)
-        )
+        text = text.replace(
+            "NUMBER_OF_LANGUAGES", str(len(SUPPORTED_LANGS))
+        ).replace("SUPPORTED_LANGUAGES", " ".join(SUPPORTED_LANGS))
     return text
 
 
@@ -133,7 +135,9 @@ def _parse_language_header(header):
                     yield None, lang_tuple[1]
 
         try:
-            return max(supported_langs(), key=lambda lang_tuple: lang_tuple[1])[0]
+            return max(
+                supported_langs(), key=lambda lang_tuple: lang_tuple[1]
+            )[0]
         except ValueError:
             return None
 
@@ -224,7 +228,9 @@ def _response(parsed_query, query, fast_mode=False):
     answer = cache.get(cache_signature)
 
     if parsed_query["orig_location"] in PLAIN_TEXT_PAGES:
-        answer = show_text_file(parsed_query["orig_location"], parsed_query["lang"])
+        answer = show_text_file(
+            parsed_query["orig_location"], parsed_query["lang"]
+        )
         if parsed_query["html_output"]:
             answer = render_template("index.html", body=answer)
 
@@ -253,7 +259,9 @@ def _response(parsed_query, query, fast_mode=False):
             #    output = fmt.png.render_ansi(
             #        output, options=parsed_query)
             result = TASKS.spawn(
-                fmt.png.render_ansi, cache._update_answer(output), options=parsed_query
+                fmt.png.render_ansi,
+                cache._update_answer(output),
+                options=parsed_query,
             )
             output = result.get()
     else:
@@ -330,7 +338,9 @@ def parse_request(location, request, query, fast_mode=False):
     parsed_query["lang"] = parsed_query.get("lang", lang)
 
     parsed_query["html_output"] = get_output_format(query, parsed_query)
-    parsed_query["json_output"] = (parsed_query.get("view", "") or "").startswith("j")
+    parsed_query["json_output"] = (
+        parsed_query.get("view", "") or ""
+    ).startswith("j")
 
     if not fast_mode:  # not png_filename and not fast_mode:
         (
@@ -340,10 +350,13 @@ def parse_request(location, request, query, fast_mode=False):
             country,
             query_source_location,
             hemisphere,
-        ) = location_processing(parsed_query["location"], parsed_query["ip_addr"])
+        ) = location_processing(
+            parsed_query["location"], parsed_query["ip_addr"]
+        )
 
         us_ip = (
-            query_source_location[2] in ["United States", "United States of America"]
+            query_source_location[2]
+            in ["United States", "United States of America"]
             and "slack" not in parsed_query["user_agent"]
         )
         query = parse_query.metric_or_imperial(query, lang, us_ip=us_ip)
@@ -372,8 +385,12 @@ def wttr(location, request):
     it returns output in HTML, ANSI or other format.
     """
 
-    def _wrap_response(response_text, html_output, json_output, png_filename=None):
-        if not isinstance(response_text, str) and not isinstance(response_text, bytes):
+    def _wrap_response(
+        response_text, html_output, json_output, png_filename=None
+    ):
+        if not isinstance(response_text, str) and not isinstance(
+            response_text, bytes
+        ):
             return response_text
 
         if png_filename:
@@ -427,7 +444,9 @@ def wttr(location, request):
             response = MALFORMED_RESPONSE_HTML_PAGE
             http_code = 500  # Internal Server Error
         else:
-            response = get_message("CAPACITY_LIMIT_REACHED", parsed_query["lang"])
+            response = get_message(
+                "CAPACITY_LIMIT_REACHED", parsed_query["lang"]
+            )
             http_code = 503  # Service Unavailable
 
         # if exception is occured, we return not a png file but text
@@ -464,7 +483,9 @@ def wttr(location, request):
             response = MALFORMED_RESPONSE_HTML_PAGE
             http_code = 500  # Internal Server Error
         else:
-            response = get_message("CAPACITY_LIMIT_REACHED", parsed_query["lang"])
+            response = get_message(
+                "CAPACITY_LIMIT_REACHED", parsed_query["lang"]
+            )
             http_code = 503  # Service Unavailable
 
         # if exception is occured, we return not a png file but text

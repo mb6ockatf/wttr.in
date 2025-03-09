@@ -50,7 +50,9 @@ def metno_request(path, query_string):
     lng = str(round(float(coords[1]), 4))
     logger.debug("lat: " + lat)
     logger.debug("lng: " + lng)
-    query_string = re.sub(r"q=[^&]*", "lat=" + lat + "&lon=" + lng + "&", query_string)
+    query_string = re.sub(
+        r"q=[^&]*", "lat=" + lat + "&lon=" + lng + "&", query_string
+    )
     logger.debug("Return path: " + path)
     logger.debug("Return query: " + query_string)
 
@@ -187,16 +189,22 @@ def group_hours_to_days(lat, lng, hourlies, days_to_return):
     timezone_str = tf.certain_timezone_at(lat=lat, lng=lng)
     logger.debug("got TZ: " + timezone_str)
     tz = timezone(timezone_str)
-    start_day_gmt = datetime.fromisoformat(hourlies[0]["time"].replace("Z", "+00:00"))
+    start_day_gmt = datetime.fromisoformat(
+        hourlies[0]["time"].replace("Z", "+00:00")
+    )
     start_day_local = start_day_gmt.astimezone(tz)
-    end_day_local = (start_day_local + timedelta(days=days_to_return - 1)).date()
+    end_day_local = (
+        start_day_local + timedelta(days=days_to_return - 1)
+    ).date()
     logger.debug("series starts at gmt time: " + str(start_day_gmt))
     logger.debug("series starts at local time: " + str(start_day_local))
     logger.debug("series ends on day: " + str(end_day_local))
     days = {}
 
     for hour in hourlies:
-        current_day_gmt = datetime.fromisoformat(hour["time"].replace("Z", "+00:00"))
+        current_day_gmt = datetime.fromisoformat(
+            hour["time"].replace("Z", "+00:00")
+        )
         current_local = current_day_gmt.astimezone(tz)
         current_day_local = current_local.date()
         if current_day_local > end_day_local:
@@ -310,7 +318,10 @@ def _convert_hour(hour):
     if "summary" in next_hour and "symbol_code" in next_hour["summary"]:
         symbol_code = next_hour["summary"]["symbol_code"]
     precipitation_amount = 0  # Default to no rain
-    if "details" in next_hour and "precipitation_amount" in next_hour["details"]:
+    if (
+        "details" in next_hour
+        and "precipitation_amount" in next_hour["details"]
+    ):
         precipitation_amount = next_hour["details"]["precipitation_amount"]
 
     uvIndex = 0  # default to 0 index
@@ -318,9 +329,9 @@ def _convert_hour(hour):
         uvIndex = details["ultraviolet_index_clear_sky"]
     localtime = ""
     if "localtime" in hour:
-        localtime = "{h:02.0f}".format(h=hour["localtime"].hour) + "{m:02.0f}".format(
-            m=hour["localtime"].minute
-        )
+        localtime = "{h:02.0f}".format(
+            h=hour["localtime"].hour
+        ) + "{m:02.0f}".format(m=hour["localtime"].minute)
         logger.debug(str(hour["localtime"]))
     # time property is local time, 4 digit 24 hour, with no :, e.g. 2100
     return {
@@ -353,7 +364,9 @@ def _convert_hour(hour):
         "visibility": "not yet implemented",  # str(details['vis_km']),
         "visibilityMiles": "not yet implemented",  # str(details['vis_miles']),
         "pressure": str(hpa_to_mb(details["air_pressure_at_sea_level"])),
-        "pressure_mmHg": str(hpa_to_mmHg(details["air_pressure_at_sea_level"])),
+        "pressure_mmHg": str(
+            hpa_to_mmHg(details["air_pressure_at_sea_level"])
+        ),
         "pressureInches": str(hpa_to_in(details["air_pressure_at_sea_level"])),
         "cloudcover": "not yet implemented",  # Convert from cloud_area_fraction?? str(details['cloud']),
         # metno doesn't have FeelsLikeC, but we-lang.go is using it in calcs,
@@ -470,7 +483,9 @@ if __name__ == "__main__":
         metno_request(req[0], req[1])
     elif len(sys.argv) == 3:
         with open(sys.argv[1], "r") as contentf:
-            content = create_standard_json_from_metno(contentf.read(), int(sys.argv[2]))
+            content = create_standard_json_from_metno(
+                contentf.read(), int(sys.argv[2])
+            )
         print(content)
     else:
         print("usage: metno <content file> <days>")

@@ -20,7 +20,9 @@ def deserialize(url):
 
     try:
         result = json.loads(
-            zlib.decompress(base64.b64decode(string, altchars=b"-_")).decode("utf-8")
+            zlib.decompress(base64.b64decode(string, altchars=b"-_")).decode(
+                "utf-8"
+            )
         )
     except zlib.error:
         return None
@@ -41,7 +43,9 @@ def metric_or_imperial(query, lang, us_ip=False):
     if query.get("use_metric", False) and not query.get("use_imperial", False):
         query["use_imperial"] = False
         query["use_metric"] = True
-    elif query.get("use_imperial", False) and not query.get("use_metric", False):
+    elif query.get("use_imperial", False) and not query.get(
+        "use_metric", False
+    ):
         query["use_imperial"] = True
         query["use_metric"] = False
     elif lang == "us":

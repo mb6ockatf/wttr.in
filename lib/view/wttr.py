@@ -38,7 +38,9 @@ def get_wetter(parsed_query):
     returncode = 0
     if not location_not_found:
         stdout, stderr, returncode = _wego_wrapper(location, parsed_query)
-        first_line, stdout = _wego_postprocessing(location, parsed_query, stdout)
+        first_line, stdout = _wego_postprocessing(
+            location, parsed_query, stdout
+        )
 
     if location_not_found or (
         returncode != 0
@@ -48,7 +50,9 @@ def get_wetter(parsed_query):
         )
         in stderr
     ):
-        stdout, stderr, returncode = _wego_wrapper(DEFAULT_LOCATION, parsed_query)
+        stdout, stderr, returncode = _wego_wrapper(
+            DEFAULT_LOCATION, parsed_query
+        )
         location_not_found = True
 
         not_found_header = """
@@ -80,7 +84,9 @@ def get_wetter(parsed_query):
             + "\n"
         )
 
-        first_line, stdout = _wego_postprocessing(location, parsed_query, stdout)
+        first_line, stdout = _wego_postprocessing(
+            location, parsed_query, stdout
+        )
         stdout = not_found_header + "\n----\n" + stdout + not_found_footer
 
     if html:
@@ -165,14 +171,20 @@ def _wego_postprocessing(location, parsed_query, stdout):
             and not parsed_query.get("days") == "0"
         )
     ):
-        line = "%s: %s [%s]\n" % (get_message("LOCATION", lang), full_address, location)
+        line = "%s: %s [%s]\n" % (
+            get_message("LOCATION", lang),
+            full_address,
+            location,
+        )
         stdout += line
 
     if parsed_query.get("padding", False):
         lines = [x.rstrip() for x in stdout.splitlines()]
         max_l = max(len(remove_ansi(x)) for x in lines)
         last_line = " " * max_l + "   .\n"
-        stdout = " \n" + "\n".join("  %s  " % x for x in lines) + "\n" + last_line
+        stdout = (
+            " \n" + "\n".join("  %s  " % x for x in lines) + "\n" + last_line
+        )
 
     return first, stdout
 
@@ -195,7 +207,8 @@ def _htmlize(ansi_output, title, parsed_query):
 
     if parsed_query.get("inverted_colors"):
         stdout = stdout.replace(
-            '<body class="">', '<body class="" style="background:white;color:#777777">'
+            '<body class="">',
+            '<body class="" style="background:white;color:#777777">',
         )
 
     title = "<title>%s</title>" % title

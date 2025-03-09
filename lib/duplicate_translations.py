@@ -52,9 +52,14 @@ def find_duplicates(directory, debug=False):
                         stripped_line = line.strip()
                         stripped_keywords = stripped_line.split(":")
                         stripped_keywords = list(
-                            map(remove_colon_and_strip_from_str, stripped_keywords)
+                            map(
+                                remove_colon_and_strip_from_str,
+                                stripped_keywords,
+                            )
                         )
-                        trimmed_keywords = list(map(str.strip, stripped_keywords))
+                        trimmed_keywords = list(
+                            map(str.strip, stripped_keywords)
+                        )
 
                         for tk in trimmed_keywords:
                             if tk == "" or tk.isdigit():
@@ -66,7 +71,9 @@ def find_duplicates(directory, debug=False):
                     duplicate_entries = {
                         k: v for k, v in lookup_table.items() if len(v) > 1
                     }
-                    print_result_for_file(file_path, file_name, duplicate_entries)
+                    print_result_for_file(
+                        file_path, file_name, duplicate_entries
+                    )
                     language_lookup_table[file_name] = duplicate_entries
             except Exception as e:
                 print(f"An error occurred while processing the file: {e}")

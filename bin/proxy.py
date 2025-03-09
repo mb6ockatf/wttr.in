@@ -52,7 +52,9 @@ from translations import PROXY_LANGS
 
 # pylint: enable=wrong-import-position
 
-proxy_logger = proxy_log.LoggerWWO(globals.PROXY_LOG_ACCESS, globals.PROXY_LOG_ERRORS)
+proxy_logger = proxy_log.LoggerWWO(
+    globals.PROXY_LOG_ACCESS, globals.PROXY_LOG_ERRORS
+)
 
 
 def is_testmode():
@@ -108,11 +110,15 @@ def _cache_file(path, query):
     is slightly varied basing on the path+query sha1 hash digest.
     """
 
-    digest = hashlib.sha1(("%s %s" % (path, query)).encode("utf-8")).hexdigest()
+    digest = hashlib.sha1(
+        ("%s %s" % (path, query)).encode("utf-8")
+    ).hexdigest()
     digest_number = ord(digest[0].upper())
     expiry_interval = 60 * (digest_number + 300)
 
-    timestamp = "%010d" % (int(time.time()) // expiry_interval * expiry_interval)
+    timestamp = "%010d" % (
+        int(time.time()) // expiry_interval * expiry_interval
+    )
     filename = os.path.join(PROXY_CACHEDIR, timestamp, path, query)
 
     return filename
@@ -157,7 +163,9 @@ def translate(text, lang):
     """
 
     def _log_unknown_translation(lang, text):
-        with open(MISSING_TRANSLATION_LOG % lang, "a") as f_missing_translation:
+        with open(
+            MISSING_TRANSLATION_LOG % lang, "a"
+        ) as f_missing_translation:
             f_missing_translation.write(text + "\n")
 
     if "," in text:
@@ -212,7 +220,9 @@ def add_translations(content, lang):
             .capitalize()
             .strip()
         )
-        d["data"]["current_condition"][0]["weatherDesc"][0]["value"] = weather_condition
+        d["data"]["current_condition"][0]["weatherDesc"][0][
+            "value"
+        ] = weather_condition
         if lang in languages_to_translate:
             d["data"]["current_condition"][0]["lang_%s" % lang] = [
                 {"value": translate(weather_condition, lang)}
@@ -221,7 +231,9 @@ def add_translations(content, lang):
             d["data"]["current_condition"][0]["lang_%s" % lang] = [
                 {
                     "value": cyr(
-                        d["data"]["current_condition"][0]["lang_%s" % lang][0]["value"]
+                        d["data"]["current_condition"][0]["lang_%s" % lang][0][
+                            "value"
+                        ]
                     )
                 }
             ]
@@ -229,13 +241,19 @@ def add_translations(content, lang):
             d["data"]["current_condition"][0]["lang_%s" % lang] = [
                 {
                     "value": _patch_greek(
-                        d["data"]["current_condition"][0]["lang_%s" % lang][0]["value"]
+                        d["data"]["current_condition"][0]["lang_%s" % lang][0][
+                            "value"
+                        ]
                     )
                 }
             ]
         elif lang == "sr-lat":
             d["data"]["current_condition"][0]["lang_%s" % lang] = [
-                {"value": d["data"]["current_condition"][0]["lang_sr"][0]["value"]}
+                {
+                    "value": d["data"]["current_condition"][0]["lang_sr"][0][
+                        "value"
+                    ]
+                }
             ]
 
         fixed_weather = []
@@ -253,7 +271,11 @@ def add_translations(content, lang):
                     ]
                 elif lang == "el":
                     h["lang_%s" % lang] = [
-                        {"value": _patch_greek(h["lang_%s" % lang][0]["value"])}
+                        {
+                            "value": _patch_greek(
+                                h["lang_%s" % lang][0]["value"]
+                            )
+                        }
                     ]
                 elif lang == "sr-lat":
                     h["lang_%s" % lang] = [{"value": h["lang_sr"][0]["value"]}]
@@ -302,7 +324,9 @@ def _fetch_content_and_headers(path, query_string, **kwargs):
         if response:
             headers = {}
             headers["Content-Type"] = response.headers["content-type"]
-            _save_content_and_headers(path, query_string, response.content, headers)
+            _save_content_and_headers(
+                path, query_string, response.content, headers
+            )
             content = response.content
         else:
             content = "{}"

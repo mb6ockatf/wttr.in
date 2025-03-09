@@ -82,7 +82,10 @@ def render_ansi(text, options=None):
     stream.feed(text)
 
     buf = sorted(screen.buffer.items(), key=lambda x: x[0])
-    buf = [[x[1] for x in sorted(line[1].items(), key=lambda x: x[0])] for line in buf]
+    buf = [
+        [x[1] for x in sorted(line[1].items(), key=lambda x: x[0])]
+        for line in buf
+    ]
 
     return _gen_term(buf, graphemes, options=options)
 
@@ -169,7 +172,9 @@ def _load_emojilib():
     emojilib = {}
     for filename in glob.glob("share/emoji/*.png"):
         character = os.path.basename(filename)[:-3]
-        emojilib[character] = Image.open(filename).resize((CHAR_HEIGHT, CHAR_HEIGHT))
+        emojilib[character] = Image.open(filename).resize(
+            (CHAR_HEIGHT, CHAR_HEIGHT)
+        )
     return emojilib
 
 
@@ -190,9 +195,13 @@ def _gen_term(buf, graphemes, options=None):
 
     bg_color = 0
     if "background" in options:
-        bg_color = _color_mapping(options["background"], options.get("inverted_colors"))
+        bg_color = _color_mapping(
+            options["background"], options.get("inverted_colors")
+        )
 
-    image = Image.new("RGB", (cols * CHAR_WIDTH, rows * CHAR_HEIGHT), color=bg_color)
+    image = Image.new(
+        "RGB", (cols * CHAR_WIDTH, rows * CHAR_HEIGHT), color=bg_color
+    )
 
     buf = buf[-ROWS:]
 
@@ -208,11 +217,18 @@ def _gen_term(buf, graphemes, options=None):
     for line in buf:
         x_pos = 0
         for char in line:
-            current_color = _color_mapping(char.fg, options.get("inverted_colors"))
+            current_color = _color_mapping(
+                char.fg, options.get("inverted_colors")
+            )
             if char.bg != "default":
                 draw.rectangle(
-                    ((x_pos, y_pos), (x_pos + CHAR_WIDTH, y_pos + CHAR_HEIGHT)),
-                    fill=_color_mapping(char.bg, options.get("inverted_colors")),
+                    (
+                        (x_pos, y_pos),
+                        (x_pos + CHAR_WIDTH, y_pos + CHAR_HEIGHT),
+                    ),
+                    fill=_color_mapping(
+                        char.bg, options.get("inverted_colors")
+                    ),
                 )
 
             if char.data == "!":
@@ -238,7 +254,9 @@ def _gen_term(buf, graphemes, options=None):
                         fill=current_color,
                     )
 
-            x_pos += CHAR_WIDTH * constants.WEATHER_SYMBOL_WIDTH_VTE.get(data, 1)
+            x_pos += CHAR_WIDTH * constants.WEATHER_SYMBOL_WIDTH_VTE.get(
+                data, 1
+            )
         y_pos += CHAR_HEIGHT
 
     if "transparency" in options:
